@@ -2,9 +2,12 @@ FROM alpine:latest
 
 WORKDIR /app
 
-COPY pocketbase.exe .
-COPY pb_data ./pb_data
-COPY pb_migrations ./pb_migrations
+# Download PocketBase for Linux
+RUN apk add --no-cache wget unzip ca-certificates
+RUN wget https://github.com/pocketbase/pocketbase/releases/download/v0.20.0/pocketbase_0.20.0_linux_amd64.zip
+RUN unzip pocketbase_0.20.0_linux_amd64.zip
+RUN rm pocketbase_0.20.0_linux_amd64.zip
+RUN chmod +x /app/pocketbase
 
 EXPOSE 8090
 
