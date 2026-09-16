@@ -1,13 +1,14 @@
-FROM golang:1.21-alpine
+FROM alpine:latest
 
 WORKDIR /app
 
-RUN apk add --no-cache git
+RUN apk add --no-cache wget unzip
 
-RUN git clone https://github.com/pocketbase/pocketbase.git . && \
-    go mod download && \
-    CGO_ENABLED=0 GOOS=linux go build -o pocketbase cmd/main.go
+RUN wget https://github.com/pocketbase/pocketbase/releases/download/v0.20.0/pocketbase_0.20.0_linux_amd64.zip && \
+    unzip pocketbase_0.20.0_linux_amd64.zip && \
+    chmod +x pocketbase && \
+    rm pocketbase_0.20.0_linux_amd64.zip
 
-EXPOSE 8090
+EXPOSE 8080
 
-CMD ["./pocketbase", "serve", "--http=0.0.0.0:8090"]
+CMD ["./pocketbase", "serve", "--http=0.0.0.0:8080"]
